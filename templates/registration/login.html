@@ -33,7 +33,7 @@
     <div class="mainlabel">ВХОД</div><br><br><br>
         {% csrf_token %}
 
-        Логин: <br><br> {{ form.username }} <br><br>
+        Логин (почта): <br><br> {{ form.email }} <br><br>
         Пароль: <br><br>{{ form.password }} <br><br><br>
         <button type="submit" class="button-container">ВОЙТИ</button>
         <input type="hidden" name="next" value="{{ next }}"/>

@@ -8,7 +8,7 @@ class SignUpForm(UserCreationForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input',
                                                          'placeholder': " "}))
     surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input', 'placeholder': " "}))
-    teacher = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input', 'placeholder': " "}))
+    father = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input', 'placeholder': " "}))
     email = forms.EmailField(max_length=200, help_text='Required', widget=forms.TextInput(attrs={'class': 'reg_input',
                                                                                                  'type': 'email',
                                                                                                  'placeholder': " "}))
@@ -39,4 +39,4 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('name', 'surname', 'teacher', 'email', 'password', 'password2')
+        fields = ('name', 'surname', 'father', 'email', 'password', 'password2')

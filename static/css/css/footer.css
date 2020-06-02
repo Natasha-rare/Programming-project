@@ -1,0 +1,34 @@
+footer {
+    color: white;
+    font-family: 'Bellota Text', cursive;
+}
+
+h1 {
+    font-family: 'Bellota Text', cursive;
+    font-size: 8pt;
+    text-align: center;
+    color: white;
+}
+
+@keyframes rotation {
+    0% {
+        transform:rotate(0deg);
+    }
+    100% {
+        transform:rotate(360deg);
+    }
+}
+
+
+.pepe {
+    animation-name: rotation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    width: 20px;
+    transform: translate(-50%,-50%);
+}
+
+img {
+
+}
