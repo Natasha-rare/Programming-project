@@ -45,7 +45,7 @@ class Scene:
         self.__entities.append(x,y,entity)
         return True
     def add_treat(self,x,y):#добавляет награду на клетку.
-        self.__treats_cells.append(x,y)
+        self.__treats_cells.append((x,y))
     def remove_treat(self,x,y):#удаляет награду с клетки. Если не удалось удалить то False, иначе True.
         for i in range(len(self.__treats_cells)):
             x_real, y_real = self.__treats_cells[i]
