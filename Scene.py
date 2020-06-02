@@ -1,10 +1,11 @@
 class Scene:
-    def __init__(self):
-        self.__size = (10,10)#размер поля в клетках
+    def __init__(self,size = (10,10)):
+        self.__size = size#размер поля в клетках
         self.__blocked_cells = []#заблокированные клетки
         self.__start = (0,0)#клетка старта
         self.__finish = (9,9)#клетка финиша
         self.__entities = []#существа|существо на сцене
+        self.__player = Player(self)
         self.__background_color = "White"#цвет заднего плана
         self.__text = "SampleText"#текст задания
         self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
@@ -53,6 +54,11 @@ class Scene:
                 self.__treats_cells.pop(i)
                 return True
         return False
+    def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
+                            # Вовзвращает шаги улитки пользователя и прошел пользователь уровень или нет. Формат такой: {steps:[],passed:Bool,errors:[]}
+        snail = self.__player
+        exec(code,{"Scene":Scene,"snail":snail,"Player":Player})
+        return snail.get_steps
     @property
     def get_start(self):#Возвращает точку старта.
         return  self.__start
@@ -73,15 +79,18 @@ class Scene:
         return self.__treats_cells
 class Player:
     def __init__(self,scene):
+        self.__steps = []  # список точек передвжиения улитки.(массив кортежей координат (x,y))
         self.__scene = scene#Объект сцены на которой находится игрок.
         self.__position = scene.get_start
         self.__rotation = 90#угол поворота игрока в градусах, можно будет менять спрайт в зависимости от этого параметра. По дефолту поворот 90 градусов, значит улитка смотрит туда ----->
         self.__collected = 0#количество собранных наград.
         self.__hp = 100#количество здоровья в процентах, не уверен, что будем убивать улиток в детской игре, но все же может пригодиться.
+
     def __go_to(self,x,y):#служебная функция для перехода на данные координаты
         if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1] or x>self.__scene.get_size[0]:
             return False
         self.__position = (x,y)
+        self.__steps.append((x,y))
         return True
     def collect(self):#Собирает с клетки на которой стоит награду, если награды нет, то возвращает False, иначе True.
         if self.__location in self.__scene.get_treats:
@@ -108,4 +117,8 @@ class Player:
             self.__go_to(x,y-1)
         if self.__rotation==270:
             self.__go_to(x-1,y)
+
+    @property
+    def get_steps(self):
+        return self.__steps
 

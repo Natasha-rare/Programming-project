@@ -1,3 +1,4 @@
+import pickle
 import tkinter
 from tkinter import simpledialog
 
@@ -6,9 +7,9 @@ import pygame
 import Scene
 
 
-def input_text():
+def input_text(text="Текст задания"):
     tkinter.Tk().withdraw()
-    result = simpledialog.askstring(title="Текст задания",prompt="Введите текст задания:")
+    result = simpledialog.askstring(title=text,prompt="Введите текст:")
     return result
 def display_grid(scene):
 
@@ -44,8 +45,13 @@ def display_grid(scene):
                     change_type="clear"
                 if event.key==pygame.K_5:
                   change_type="treat"
+                if event.key==pygame.K_s:
+                    name = input_text("Введите имя файла:")
+                    if name!=None:
+                        with open(name, 'wb') as output:
+                            pickle.dump(scene, output, pickle.HIGHEST_PROTOCOL)
                 if event.key==pygame.K_6:
-                    print(input_text())
+                    input_text()
             if event.type==pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 column = pos[0] // (WIDTH + MARGIN)
@@ -86,4 +92,4 @@ def display_grid(scene):
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
-display_grid(Scene.Scene())
+display_grid(Scene.Scene((1,5)))
