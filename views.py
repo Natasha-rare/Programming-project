@@ -8,16 +8,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Max
 from django.contrib.auth import password_validation
-# from .tokens import account_activation_token
-# from .forms import *
-# import json
+from .tokens import account_activation_token
+from .forms import *
+import json
 # import vk_api
 # from .models import Bot
 # from virtualperson.settings import DEBUG
 from os import system as shell
 
 
-def signup(request):
+def registration(request):
     """
     Страница регистрации. Отправляет письмо на указанную почту со ссылкой для подтверждения
 
@@ -27,18 +27,18 @@ def signup(request):
 
     if request.method == 'POST':
         if 'username' in request.POST and 'email' not in request.POST \
-                and 'password1' not in request.POST and 'password2' not in request.POST:
+                and 'password' not in request.POST and 'password2' not in request.POST:
             username_occupation = User.objects.filter(username=request.POST['username']).exists()
             return HttpResponse(content_type='json', content=json.dumps({'username_occupation': username_occupation, }))
         if 'email' in request.POST and 'username' not in request.POST \
-                and 'password1' not in request.POST and 'password2' not in request.POST:
+                and 'password' not in request.POST and 'password2' not in request.POST:
             email_occupation = User.objects.filter(email=request.POST['email']).exists()
             return HttpResponse(content_type='json', content=json.dumps({'email_occupation': email_occupation, }))
 
-        if 'password1' in request.POST and 'username' not in request.POST \
+        if 'password' in request.POST and 'username' not in request.POST \
                 and 'email' not in request.POST and 'password2' not in request.POST:
             try:
-                password_validation.validate_password(request.POST['password1'])
+                password_validation.validate_password(request.POST['password'])
             except:
                 password_incorrect = True
             else:
@@ -67,7 +67,7 @@ def signup(request):
                 'form': SignUpForm(),
             })
 
-        user = form.save(commit=False)  # это точно нужно?
+        user = form.save(commit=False)
         user.is_active = False
         user.save()
         current_site = get_current_site(request)
@@ -116,20 +116,6 @@ def activate(request, uidb64, token):
                         status=409)  # 409 'Conflict' - запрос конфликтует с текущим состоянием сервера
 
 
-def main(request):
-    max_bot_id = Bot.objects.aggregate(Max('id')).get('id__max')
-    # max_user_id = User.objects.aggregate(Max('id')).get('id__max')
-    max_user_id = User.objects.count()
-    if max_bot_id is None: max_bot_id = 0
-    if max_user_id is None: max_user_id = 0
-    return render(request, 'startpage.html', {
-        'user': request.user.id,
-        'count_bot_all': max_bot_id,
-        'count_user': max_user_id,
-        'count_bot_active': Bot.objects.count(),
-    })
-
-
 @login_required
 def lk(request, user_id):
     """
@@ -141,24 +127,7 @@ def lk(request, user_id):
     if request.user.id != user_id:
         return HttpResponse(status=403, content='Forbidden')
 
-    if request.method == 'GET':
-        list_of_bots = Bot.objects.filter(owner=request.user)
-
-        bots_one_by_three = []
-
-        for i in range(0, len(list_of_bots), 3):
-            tmp_arr = [list_of_bots[i]]
-            if i + 1 < len(list_of_bots):
-                tmp_arr.append(list_of_bots[i + 1])
-            if i + 2 < len(list_of_bots):
-                tmp_arr.append(list_of_bots[i + 2])
-            bots_one_by_three.append(tmp_arr)
-
-        return render(request, 'lk.html', {
-            'id': request.user.id,
-            'bots': bots_one_by_three,
-        })
-    elif request.method == 'DELETE':
+    if request.method == 'DELETE':
         user = User.objects.get(pk=request.user.pk)
         user.delete()
         return HttpResponse(status=200, content='Пользователь удалён')
