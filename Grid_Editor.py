@@ -1,8 +1,15 @@
+import tkinter
+from tkinter import simpledialog
+
 import pygame
 
 import Scene
 
 
+def input_text():
+    tkinter.Tk().withdraw()
+    result = simpledialog.askstring(title="Текст задания",prompt="Введите текст задания:")
+    return result
 def display_grid(scene):
     size = scene.get_size
     change_type = "block"
@@ -32,6 +39,8 @@ def display_grid(scene):
                     change_type="finish"
                 if event.key==pygame.K_4:
                     change_type="clear"
+                if event.key==pygame.K_5:
+                    print(input_text())
             if event.type==pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 column = pos[0] // (WIDTH + MARGIN)
