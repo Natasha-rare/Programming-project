@@ -11,7 +11,7 @@ def input_text(text="Текст задания"):
     tkinter.Tk().withdraw()
     result = simpledialog.askstring(title=text,prompt="Введите текст:")
     return result
-def display_grid(scene):
+def display_grid(scene,additional_paint = []):
 
     size = scene.get_size
     change_type = "block"
@@ -24,7 +24,7 @@ def display_grid(scene):
     HEIGHT = 40
     MARGIN = 5
     pygame.init()
-    window_size = (size[1]*(WIDTH+MARGIN)+10,size[0]*(WIDTH+MARGIN)+10)
+    window_size = (size[0]*(WIDTH+MARGIN)+10,size[1]*(HEIGHT+MARGIN)+10)
     screen = pygame.display.set_mode(window_size)
     load_treat = pygame.image.load("treat.png").convert()
     load_treat = pygame.transform.scale(load_treat,(30,30))
@@ -71,8 +71,8 @@ def display_grid(scene):
                         scene.set_start(-1,-1)
                 if change_type=="treat":
                     scene.add_treat(column,row)
-        for i in range(size[0]):
-            for j in range(size[1]):
+        for i in range(size[1]):
+            for j in range(size[0]):
                 color = (255,255,255)
                 if (j,i)in scene.get_blocked:
                     color = (0,0,255)
@@ -89,7 +89,15 @@ def display_grid(scene):
                                   HEIGHT])
                 if (j,i) in scene.get_treats:
                     screen.blit(load_treat,((MARGIN + WIDTH) * j + MARGIN,(MARGIN + HEIGHT) * i + MARGIN))
+                if (j, i) in additional_paint:
+                    pygame.draw.circle(screen,
+                                       (255,0,0),
+                                 [(MARGIN + WIDTH) * j + MARGIN,
+                                  (MARGIN + HEIGHT) * i + MARGIN,
+                                  ],int(HEIGHT/2),2)
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
-display_grid(Scene.Scene((1,5)))
+if __name__ == '__main__':
+
+    display_grid(Scene.Scene((10,10)))

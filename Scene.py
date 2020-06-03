@@ -1,3 +1,9 @@
+from RestrictedPython import compile_restricted
+from RestrictedPython import safe_globals
+from RestrictedPython.Eval import default_guarded_getiter
+from RestrictedPython.Guards import guarded_iter_unpack_sequence
+
+
 class Scene:
     def __init__(self,size = (10,10)):
         self.__size = size#размер поля в клетках
@@ -8,7 +14,7 @@ class Scene:
         self.__player = Player(self)
         self.__background_color = "White"#цвет заднего плана
         self.__text = "SampleText"#текст задания
-        self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
+        #self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
     def set_size(self,x,y):#Устанавливает размер сцены, если сцена меньше чем одна клетка, то вызывает исключение.
@@ -54,11 +60,32 @@ class Scene:
                 self.__treats_cells.pop(i)
                 return True
         return False
+
     def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
-                            # Вовзвращает шаги улитки пользователя и прошел пользователь уровень или нет. Формат такой: {steps:[],passed:Bool,errors:[]}
+                            # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
+
         snail = self.__player
-        exec(code,{"Scene":Scene,"snail":snail,"Player":Player})
-        return snail.get_steps
+
+        byte_code = compile_restricted(code, '<string>', 'exec')
+        safe_globals.update({"Scene":Scene,"snail":snail,"Player":Player})
+        safe_globals['_getiter_'] = default_guarded_getiter
+        safe_globals['_iter_unpack_sequence_'] = guarded_iter_unpack_sequence
+        errors = []
+        try:
+            exec(byte_code,safe_globals,{})#{"Scene":Scene,"snail":snail,"Player":Player}
+        except Exception as e:
+            errors.append('SystemError:'+str(e))
+
+
+        passed = False
+        if len(snail.get_steps) ==0 or snail.get_steps[-1]!=self.get_finish:
+            errors.append("Not_On_Finish_Point")  # Добавляет ошибку, указывающую на то, что игрок не достиг финиша.
+        for i in self.__forbidden_functions:
+            if i in code:
+                errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
+        if len(errors)==0:
+            passed=True
+        return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
     @property
     def get_start(self):#Возвращает точку старта.
         return  self.__start
@@ -83,21 +110,24 @@ class Player:
         self.__scene = scene#Объект сцены на которой находится игрок.
         self.__position = scene.get_start
         self.__rotation = 90#угол поворота игрока в градусах, можно будет менять спрайт в зависимости от этого параметра. По дефолту поворот 90 градусов, значит улитка смотрит туда ----->
-        self.__collected = 0#количество собранных наград.
+        self.__collected = []#массив кортежей (x,y), указывающий точки в которых пользователь подобрал награды
         self.__hp = 100#количество здоровья в процентах, не уверен, что будем убивать улиток в детской игре, но все же может пригодиться.
 
     def __go_to(self,x,y):#служебная функция для перехода на данные координаты
-        if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1] or x>self.__scene.get_size[0]:
+        if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1]-1 or x>self.__scene.get_size[0]-1:
             return False
         self.__position = (x,y)
         self.__steps.append((x,y))
         return True
     def collect(self):#Собирает с клетки на которой стоит награду, если награды нет, то возвращает False, иначе True.
-        if self.__location in self.__scene.get_treats:
-            self.__collected+=1
-            self.__scene.remove_treat(self.__location[0],self.__location[1])
+        if self.__position in self.__scene.get_treats:
+            self.__collected.append(self.__position)
+            self.__scene.remove_treat(self.__position[0],self.__position[1])
             return True
         return False
+    @property
+    def get_collected(self):#Возвращает массив кортежей (x,y), указывающий точки в которых пользователь подобрал награды
+        return self.__collected
     def turn_left(self):#поворачивает игрока на 90 градусов влево
         self.__rotation-=90
         if self.__rotation<0:
@@ -121,4 +151,3 @@ class Player:
     @property
     def get_steps(self):
         return self.__steps
-
