@@ -21,7 +21,29 @@
   <component name="ChangeListManager">
     <list default="true" id="472e46fe-87ea-49e2-bf41-61abc90d3b3b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/css/base-css.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/base-css.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/css/footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/footer.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/css/lk.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/lk.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/css/start.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/start.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/acc_active_email.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/acc_active_email.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/acc_active_sent.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/acc_active_sent.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/email_activate_message.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/email_activate_message.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/email_confirmed.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/email_confirmed.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/logged_out.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/logged_out.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/password_reset_complete.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/password_reset_complete.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/password_reset_confirm.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/password_reset_confirm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/password_reset_done.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/password_reset_done.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/password_reset_email.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/password_reset_email.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/password_reset_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/password_reset_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tokens.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/tokens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,20 +70,21 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/static/css" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$/templates/registration/registration" />
-      <recent name="$PROJECT_DIR$/templates/registration" />
+      <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/css" />
-      <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/project" />
+      <recent name="$PROJECT_DIR$/templates" />
+      <recent name="$PROJECT_DIR$/templates/registration/registration" />
     </key>
   </component>
   <component name="RunManager" selected="Python.manage">
@@ -127,6 +150,9 @@
     </task>
     <servers />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -140,29 +166,37 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="886" height="209" key="GridCell.Tab.0.bottom" timestamp="1591111223654">
-      <screen x="0" y="23" width="1440" height="814" />
+    <state width="1419" height="209" key="GridCell.Tab.0.bottom" timestamp="1591166264567">
+      <screen x="0" y="23" width="1440" height="811" />
     </state>
+    <state width="1419" height="209" key="GridCell.Tab.0.bottom/0.23.1440.811@0.23.1440.811" timestamp="1591166264567" />
     <state width="1419" height="209" key="GridCell.Tab.0.bottom/0.23.1440.812@0.23.1440.812" timestamp="1591108342225" />
     <state width="886" height="209" key="GridCell.Tab.0.bottom/0.23.1440.814@0.23.1440.814" timestamp="1591111223654" />
-    <state width="886" height="209" key="GridCell.Tab.0.center" timestamp="1591111223653">
-      <screen x="0" y="23" width="1440" height="814" />
+    <state width="1419" height="209" key="GridCell.Tab.0.center" timestamp="1591166264565">
+      <screen x="0" y="23" width="1440" height="811" />
     </state>
+    <state width="1419" height="209" key="GridCell.Tab.0.center/0.23.1440.811@0.23.1440.811" timestamp="1591166264565" />
     <state width="1419" height="209" key="GridCell.Tab.0.center/0.23.1440.812@0.23.1440.812" timestamp="1591108342223" />
     <state width="886" height="209" key="GridCell.Tab.0.center/0.23.1440.814@0.23.1440.814" timestamp="1591111223653" />
-    <state width="886" height="209" key="GridCell.Tab.0.left" timestamp="1591111223652">
-      <screen x="0" y="23" width="1440" height="814" />
+    <state width="1419" height="209" key="GridCell.Tab.0.left" timestamp="1591166264565">
+      <screen x="0" y="23" width="1440" height="811" />
     </state>
+    <state width="1419" height="209" key="GridCell.Tab.0.left/0.23.1440.811@0.23.1440.811" timestamp="1591166264565" />
     <state width="1419" height="209" key="GridCell.Tab.0.left/0.23.1440.812@0.23.1440.812" timestamp="1591108342221" />
     <state width="886" height="209" key="GridCell.Tab.0.left/0.23.1440.814@0.23.1440.814" timestamp="1591111223652" />
-    <state width="886" height="209" key="GridCell.Tab.0.right" timestamp="1591111223653">
-      <screen x="0" y="23" width="1440" height="814" />
+    <state width="1419" height="209" key="GridCell.Tab.0.right" timestamp="1591166264566">
+      <screen x="0" y="23" width="1440" height="811" />
     </state>
+    <state width="1419" height="209" key="GridCell.Tab.0.right/0.23.1440.811@0.23.1440.811" timestamp="1591166264566" />
     <state width="1419" height="209" key="GridCell.Tab.0.right/0.23.1440.812@0.23.1440.812" timestamp="1591108342224" />
     <state width="886" height="209" key="GridCell.Tab.0.right/0.23.1440.814@0.23.1440.814" timestamp="1591111223653" />
     <state x="221" y="67" key="SettingsEditor" timestamp="1591018366712">
       <screen x="0" y="23" width="1440" height="814" />
     </state>
     <state x="221" y="67" key="SettingsEditor/0.23.1440.814@0.23.1440.814" timestamp="1591018366712" />
+    <state x="385" y="158" width="670" height="676" key="search.everywhere.popup" timestamp="1591165445761">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="385" y="158" width="670" height="676" key="search.everywhere.popup/0.23.1440.811@0.23.1440.811" timestamp="1591165445761" />
   </component>
 </project>

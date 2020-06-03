@@ -11,9 +11,7 @@ from django.contrib.auth import password_validation
 from .tokens import account_activation_token
 from .forms import *
 import json
-# import vk_api
-# from .models import Bot
-# from virtualperson.settings import DEBUG
+from project.settings import DEBUG
 from os import system as shell
 
 
@@ -133,3 +131,8 @@ def lk(request, user_id):
         return HttpResponse(status=200, content='Пользователь удалён')
     return HttpResponse(status=405)
 
+
+def main(request):
+    return render(request, 'startpage.html', {
+        'user': request.user.id
+    })
