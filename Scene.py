@@ -147,13 +147,19 @@ class Player:
         x = self.__position[0]
         y = self.__position[1]
         if self.__rotation==0:
-            self.__go_to(x,y+1)
+            self.__go_to(x,y-1)
         if self.__rotation ==90:
             self.__go_to(x+1,y)
         if self.__rotation==180:
-            self.__go_to(x,y-1)
+            self.__go_to(x,y+1)
         if self.__rotation==270:
             self.__go_to(x-1,y)
     @property
     def get_steps(self):
         return self.__steps
+    @property
+    def get_rotation(self):
+        return  self.__rotation
+    @property
+    def get_position(self):
+        return self.__position
