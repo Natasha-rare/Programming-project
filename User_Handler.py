@@ -11,7 +11,7 @@ def Run_Code(text):
     file = open('test1.pkl','rb')
     scene = pickle.load(file)
 
-    steps = scene.Solve_Code(text)
+    steps = scene.Solve_Code_Safe(text)
     print(steps)
     display_grid(scene,additional_paint=steps['steps'])
 def Request_Code():

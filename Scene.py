@@ -1,9 +1,23 @@
+import multiprocessing
+import resource
+import signal
+
 from RestrictedPython import compile_restricted
 from RestrictedPython import safe_globals
 from RestrictedPython.Eval import default_guarded_getiter
 from RestrictedPython.Guards import guarded_iter_unpack_sequence
 
 
+def time_exceeded(signo, frame):
+    print("Time's up !")
+    raise SystemExit(1)
+
+
+def set_max_runtime(seconds):
+    # setting up the resource limit
+    soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
+    resource.setrlimit(resource.RLIMIT_CPU, (seconds, hard))
+    signal.signal(signal.SIGXCPU, time_exceeded)
 class Scene:
     def __init__(self,size = (10,10)):
         self.__size = size#размер поля в клетках
@@ -60,10 +74,16 @@ class Scene:
                 self.__treats_cells.pop(i)
                 return True
         return False
+    def Solve_Code_Safe(self,code):
+        ret_value = multiprocessing.Value("d", 0.0, lock=False)
+        p = multiprocessing.Process(target = self.__Solve_Code, args=(code,ret_value))
+        p.start()
+        p.join()
 
-    def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
+        return ret_value.value
+    def __Solve_Code(self,code,ret_value):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
                             # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
-
+        set_max_runtime(1)#Максимальное кол-во секунд действия процессора
         snail = self.__player
 
         byte_code = compile_restricted(code, '<string>', 'exec')
@@ -85,7 +105,9 @@ class Scene:
                 errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
         if len(errors)==0:
             passed=True
+        ret_value.value = {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
+
     @property
     def get_start(self):#Возвращает точку старта.
         return  self.__start
