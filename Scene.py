@@ -1,23 +1,10 @@
-import multiprocessing
-import resource
-import signal
-
 from RestrictedPython import compile_restricted
 from RestrictedPython import safe_globals
 from RestrictedPython.Eval import default_guarded_getiter
 from RestrictedPython.Guards import guarded_iter_unpack_sequence
+from pebble import concurrent
 
 
-def time_exceeded(signo, frame):
-    print("Time's up !")
-    raise SystemExit(1)
-
-
-def set_max_runtime(seconds):
-    # setting up the resource limit
-    soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
-    resource.setrlimit(resource.RLIMIT_CPU, (seconds, hard))
-    signal.signal(signal.SIGXCPU, time_exceeded)
 class Scene:
     def __init__(self,size = (10,10)):
         self.__size = size#размер поля в клетках
@@ -75,14 +62,16 @@ class Scene:
                 return True
         return False
     def Solve_Code_Safe(self,code):
-
-        pool = multiprocessing.Pool(processes=1)
-        return pool.map(self.Solve_Code, [code])
-
-
+        future = self.Solve_Code(code)
+        try:
+            result = future.result()
+            return self.Solve_Code(code)
+        except Exception as error:
+            return error
+    @concurrent.process(timeout=2)
     def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
                             # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
-        set_max_runtime(1)#Максимальное кол-во секунд действия процессора
+        #set_max_runtime(1)#Максимальное кол-во секунд действия процессора
         snail = self.__player
 
         byte_code = compile_restricted(code, '<string>', 'exec')
@@ -94,8 +83,6 @@ class Scene:
             exec(byte_code,safe_globals,{})#{"Scene":Scene,"snail":snail,"Player":Player}
         except Exception as e:
             errors.append('SystemError:'+str(e))
-
-
         passed = False
         if len(snail.get_steps) ==0 or snail.get_steps[-1]!=self.get_finish:
             errors.append("Not_On_Finish_Point")  # Добавляет ошибку, указывающую на то, что игрок не достиг финиша.
@@ -104,9 +91,7 @@ class Scene:
                 errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
         if len(errors)==0:
             passed=True
-        ret_value = {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
-
     @property
     def get_start(self):#Возвращает точку старта.
         return  self.__start
@@ -168,7 +153,6 @@ class Player:
             self.__go_to(x,y-1)
         if self.__rotation==270:
             self.__go_to(x-1,y)
-
     @property
     def get_steps(self):
         return self.__steps
