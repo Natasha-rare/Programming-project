@@ -18,6 +18,7 @@ class Scene:
         #self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
+        self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
     def set_size(self,x,y):#Устанавливает размер сцены, если сцена меньше чем одна клетка, то вызывает исключение.
         if (x==0 and y ==0) or (x<0 or y<0):
             raise Exception("Invalid scene size")
@@ -61,6 +62,12 @@ class Scene:
                 self.__treats_cells.pop(i)
                 return True
         return False
+    def add_limited_function(self,function_name,amount):#Добавляет лимит на использование функции с назанием function_name, т.е ее можно будет использовать только amount раз
+        self.__limited_functions.append({"name":function_name,"amount_allowed":amount})
+    def remove_limited_function(self,function_name):
+        for i in range(len(self.__limited_functions)):
+            if self.__limited_functions[i]['name']==function_name:
+                self.__limited_functions.pop(i)
     def Solve_Code_Safe(self,code):
         future = self.Solve_Code(code)
         try:
@@ -90,6 +97,9 @@ class Scene:
         for i in self.__forbidden_functions:
             if i in code:
                 errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
+        for i in self.__limited_functions:
+            if code.count((i['name'])>i['amount_allowed']):
+                errors.append("Exceeded_Limit_Of_Function:"+i['name'])
         if len(errors)==0:
             passed=True
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
@@ -111,6 +121,9 @@ class Scene:
     @property
     def get_treats(self):
         return self.__treats_cells
+    @property
+    def get_limited_functions(self):
+        return self.__limited_functions
 class Player:
     def __init__(self,scene):
         self.__steps = []  # список точек передвжиения улитки.(массив кортежей координат (x,y))
