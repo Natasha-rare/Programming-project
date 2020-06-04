@@ -75,13 +75,12 @@ class Scene:
                 return True
         return False
     def Solve_Code_Safe(self,code):
-        ret_value = multiprocessing.Value("d", 0.0, lock=False)
-        p = multiprocessing.Process(target = self.__Solve_Code, args=(code,ret_value))
-        p.start()
-        p.join()
 
-        return ret_value.value
-    def __Solve_Code(self,code,ret_value):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
+        pool = multiprocessing.Pool(processes=1)
+        return pool.map(self.Solve_Code, [code])
+
+
+    def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
                             # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
         set_max_runtime(1)#Максимальное кол-во секунд действия процессора
         snail = self.__player
@@ -105,7 +104,7 @@ class Scene:
                 errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
         if len(errors)==0:
             passed=True
-        ret_value.value = {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
+        ret_value = {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
 
     @property
