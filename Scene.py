@@ -65,10 +65,11 @@ class Scene:
         future = self.Solve_Code(code)
         try:
             result = future.result()
-            return self.Solve_Code(code)
+
+            return result
         except Exception as error:
             return error
-    @concurrent.process(timeout=2)
+    @concurrent.process(timeout=6)
     def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
                             # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
         #set_max_runtime(1)#Максимальное кол-во секунд действия процессора
