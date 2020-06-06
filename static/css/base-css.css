@@ -1,51 +1,33 @@
 @media screen {
 
-
-	/*html, body {
-        height: 100%;
-
-    }
-
-    body {
-        margin: 0;
-        background: linear-gradient(#aa4b6b,#6b6b83,#3b8d99);
-        animation: gradient 10s ease infinite;
-        background-size: 500% 500%;
-    }*/
-	/*
-     body {
-        background: linear-gradient(-45deg, #aa4b6b,#6b6b83,#3b8d99);
-        background-size: 400% 400%;
-        animation: gradient 10s ease infinite;
-    }
-    */
 	html {
 		width: 100%;
 
 	}
 
 	body {
-		overflow: auto;
-		*margin: 0;
-		width: 100%;
-		background-attachment: fixed;
-		background-repeat: no-repeat;
-		background-color: #24303F;
-		height: 100vh;
+		overflow: auto; /*прокрутка при необходимости*/
+		*margin: 0; /*отступ*/
+		width: 100%; /*ширина*/
+		background-attachment: fixed; /*фон не подвижен*/
+		background-repeat: no-repeat; /*фон не меняется*/
+		background-color: #24303F; /*основной цыет -- можно сделать что-то более весёленькое*/
+		height: 100vh; /*высота*/
 
 	}
 
 	body:before {
 		content: '';
-		/*background: #c4252a url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/cheap_diagonal_fabric.png);*/
-		/* background-blend-mode: multiply;
+		/*background: #c4252a url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/cheap_diagonal_fabric.png);
+		 background-blend-mode: multiply;
          mix-blend-mode: multiply;
          position: relative;
          */
+         /*Отступы*/
 		left: 0;
 		top: 0;
 		width: 100%;
-		z-index: 10;
+		z-index: 10; /*3д эффект (накладка изображений)*/
 		/*background: linear-gradient(-45deg, #aa4b6b,#6b6b83,#3b8d99);*/
 		/*background: linear-gradient(-45deg, #0F2027, #203A43, #2C5364);
         background-size: 400% 400%;
@@ -54,22 +36,18 @@
 
 	}
 
+    /*холст*/
 	canvas {
-		opacity: 0.0;
-		transition: 1s opacity cubic-bezier(0.55, 0, 0.1, 1);
+		opacity: 0.0; /*прозрачность*/
+		transition: 1s opacity cubic-bezier(0.55, 0, 0.1, 1);  /*движение...*/
 		background-attachment: fixed;
 		background-repeat: no-repeat;
-
-
-
 	}
 
 	canvas.ready {
 		opacity: 0.9;
 		background-attachment: fixed;
-		height: 200vh;
-
-
+		height: 200vh;  /*высота*/
 	}
 
 	body > canvas {
@@ -88,13 +66,13 @@
 	.intro {
 		background-attachment: fixed;
 		background-repeat: no-repeat;
-		position: absolute;
+		position: absolute;  /*элемент абсолютно позиционирован*/
 
 		/*padding: 20px;*/
 
 		left: 50%;
 		top: 50%;
-		text-align: center;
+		text-align: center;  /*выравнивание текста*/
 		color: #fafafa;
 		z-index: 10;
 		width: 100%;
@@ -105,8 +83,8 @@
 
 	.intro h1 {
 		font-size: 40px;
-		font-weight: 300;
-		letter-spacing: 2px;
+		font-weight: 300;  /*насыщенность цвета*/
+		letter-spacing: 2px;  /*отступы между буквами*/
 	}
 
 	.intro p {
@@ -240,12 +218,13 @@
 
 	}
 
+     /*ненажатая кнопка при наведении на нее мышки*/
 	.button-container:hover {
 		background: white;
-		color: rgba(0, 0, 0, 0); /*нужно разобраться с прозрачным текстом на кнопках, потому что пока не работает*/
-
+		color: rgba(0, 0, 0, 0.5); /*нужно разобраться с прозрачным текстом на кнопках, потому что пока не работает*/
 	}
 
+    /*до экнопки*/
 	.button-container:hover:before {
 		bottom: 0%;
 		top: auto;
@@ -337,21 +316,27 @@
 		color: #60666d;
 	}
 
+    /*Ландшафтный экран*/
 	@media (min-width: 768px) {
 		.select-box {
 			width: 70%;
 		}
 	}
+
+    /*настольный дсисплей*/
 	@media (min-width: 992px) {
 		.select-box {
 			width: 50%;
 		}
 	}
+
+	/* Большой дисплей */
 	@media (min-width: 1200px) {
 		.select-box {
 			width: 30%;
 		}
 	}
+    /*Выбранный элемент*/
 	.select-box__current {
 		position: relative;
 		box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
@@ -359,6 +344,7 @@
 		outline: none;
 	}
 
+    /*Элемент на который наведен курсор*/
 	.select-box__current:focus + .select-box__list {
 		opacity: 1;
 		animation-name: none;
@@ -386,6 +372,7 @@
 		display: flex;
 	}
 
+    /*вводимые текст*/
 	.select-box__input {
 		display: none;
 	}
@@ -408,11 +395,11 @@
 		padding: 0;
 		list-style: none;
 		opacity: 0;
-		animation-name: HideList;
-		animation-duration: 0.5s;
-		animation-delay: 0.5s;
-		animation-fill-mode: forwards;
-		animation-timing-function: step-start;
+		animation-name: HideList; /*название анимации*/
+		animation-duration: 0.5s; /*продолжительность*/
+		animation-delay: 0.5s; /*хадержка анимации*/
+		animation-fill-mode: forwards; /*картинка остается*/
+		animation-timing-function: step-start; /*пошаговая анимация*/
 		box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
 	}
 
@@ -539,85 +526,49 @@
 
 
 
-ul {
-        font: 14px Verdana, Geneva, sans-serif;
-        text-align: justify;
+    ul {
+            font: 14px Verdana, Geneva, sans-serif;
+            text-align: justify;
 
-        /* Обнуляем для родителя*/
-        line-height: 0;
-        font-size: 1px; /* 1px для Opera */
+            /* Обнуляем для родителя*/
+            line-height: 0;
+            font-size: 1px; /* 1px для Opera */
 
-        /* Лекарство для IE6-7*/
-        text-justify: newspaper;
-}
+            /* Лекарство для IE6-7*/
+            text-justify: newspaper;
+    }
 
-        ul li  {
-                background: #E76D13;
-                width: 98px;
-                height: 98px;
-                display: inline-block;
-                text-align: left;
-                border: 1px solid #000;
+    ul li  {
+            background: #E76D13;
+            width: 98px;
+            height: 98px;
+            display: inline-block;
+            text-align: left;
+            border: 1px solid #000;
 
-                /* Востанавливаем у потомков, кроме последнего*/
-                line-height: normal;
-                font-size: 14px;
+            /* Востанавливаем у потомков, кроме последнего*/
+            line-height: normal;
+            font-size: 14px;
 
-                /* Без него в Opera будет отступ под элементами */
-                vertical-align: top;
+            /* Без него в Opera будет отступ под элементами */
+            vertical-align: top;
 
-                /* эмуляция inline-block для IE6-7*/
-                //display : inline;
-                //zoom : 1;
-        }
-        ul li.helper {
-                width: 100%;
-                height: 0px;
-                visibility: hidden;
-                overflow: hidden;
-        }
-        .first { width: 150px;}
-        .third { width: 200px;}
+            /* эмуляция inline-block для IE6-7*/
+            //display : inline;
+            //zoom : 1;
+    }
+    ul li.helper {
+            width: 100%;
+            height: 0px;
+            visibility: hidden;
+            overflow: hidden;
+    }
+    .first { width: 150px;}
+    .third { width: 200px;}
 
 
-.bot-but {
-    padding: 1em 3em;
-    border: 3px solid;
-    transition: all 300ms ease;
-    box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.2);
 
-}
-
-.bot-but:before {
-    position: absolute;
-    content: '';
-    width: 0;
-    height: 100%;
-    background: linear-gradient(90deg, #ec008c, #fc6767);
-    top: 0;
-    left: auto;
-    right: 0;
-    z-index: -1;
-    transition: all 300ms ease;
-}
-
-.bot-but:hover {
-    color: white;
-    box-shadow: none;
-}
-
-.bot-but:hover:before {
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #ec008c, #fc6767);
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: -1;
-}
-
+/*ячейка*/
 th {
     text-decoration: none;
     font-weight: 500;
@@ -642,6 +593,7 @@ th {
     animation-timing-function: linear;
 }
 
+/*загрузка*/
 .preloader {
   position: relative;
   /* координаты положения */

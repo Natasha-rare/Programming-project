@@ -72,10 +72,6 @@ button:hover{
     position: relative;
 
 transform: translate(0, 0);
-
-
-
-
 }
 
 @keyframes gradient {
@@ -105,8 +101,6 @@ table {
     height: 20%;
     margin: auto;
     font-family: 'Quicksand', sans-serif;
-
-
 }
 
 .vv {
@@ -125,6 +119,7 @@ th {
     font-size: 16pt;
 }
 
+/*градиент*/
 .grad {
     background: linear-gradient(#ec008c, #fc6767); /* Градиент для текста */
    }
@@ -158,6 +153,7 @@ th {
    .colortext {
      color: red; /* Красный цвет выделения */
    }
+
 div {
     padding: 0;
     margin: 0;
@@ -168,6 +164,7 @@ div {
   margin: auto;
     font-family: 'Quicksand', sans-serif;
 }
+
 .liquid-button path {
   cursor: pointer;
     font-family: 'Quicksand', sans-serif;
