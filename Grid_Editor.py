@@ -1,10 +1,52 @@
 import pickle
 import tkinter
+from tkinter import *
 from tkinter import simpledialog
 
 import pygame
 
 import Scene
+
+
+def Additional_Settings(scene):
+
+    root = Tk()
+    root.title("Доп настройки.")
+
+    forbidden_funct = Label(text="Запрещенная функция:")
+    total_steps = Label(text="Максимальное количество шагов:")
+    limited_funct = Label(text="Лимитированные функции:")
+    forbidden_funct.grid(row=0, column=0, sticky="w")
+    total_steps.grid(row=1, column=0, sticky="w")
+    limited_funct.grid(row=2, column=0, sticky="w")
+
+    forbid_entry = Entry()
+    steps_entry = Entry()
+    limited_entry_name = Entry()
+    limited_entry_amount = Entry()
+    forbid_entry.grid(row=0, column=1, padx=5, pady=5)
+    forbid_button = Button(text="Запретить", command=scene.add_forbiden_func(forbid_entry.get()))
+    max_steps_button = Button(text="Установить", command=scene.set_player_step_limit(steps_entry.get()))
+    max_steps_button.grid(row=1, column=2, padx=5, pady=5)
+
+    forbid_button.grid(row = 0, column = 2,padx=5, pady=5)
+    steps_entry.grid(row=1, column=1, padx=5, pady=5)
+    limited_entry_name.grid(row=2, column=1, padx=5, pady=5)
+    limited_entry_amount.grid(row=2, column=2, padx=5, pady=5)
+
+    limit_funct_button =Button(text="Добавить", command=scene.add_limited_function(limited_entry_name.get(),limited_entry_amount.get()))
+    limit_funct_button.grid(row=2, column=3, padx=5, pady=5)
+    root.mainloop()
+    return scene
+    # вставка начальных данных
+    # name_entry.insert(0, "Tom")
+    # surname_entry.insert(0, "Soyer")
+    #
+    # display_button = Button(text="Display", command=display)
+    # clear_button = Button(text="Clear", command=clear)
+    #
+    # display_button.grid(row=2, column=0, padx=5, pady=5, sticky="e")
+    # clear_button.grid(row=2, column=1, padx=5, pady=5, sticky="e")
 
 
 def input_text(text="Текст задания"):
@@ -52,6 +94,9 @@ def display_grid(scene,additional_paint = []):
                             pickle.dump(scene, output, pickle.HIGHEST_PROTOCOL)
                 if event.key==pygame.K_6:
                     input_text()
+                if event.key==pygame.K_a:
+
+                    scene = Additional_Settings(scene)
             if event.type==pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 column = pos[0] // (WIDTH + MARGIN)
@@ -100,4 +145,5 @@ def display_grid(scene,additional_paint = []):
     pygame.quit()
 if __name__ == '__main__':
 
-    display_grid(Scene.Scene((10,10)))
+    scene = Scene.Scene((10, 10))
+    display_grid(scene)
