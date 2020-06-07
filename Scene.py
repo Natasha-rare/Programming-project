@@ -11,14 +11,17 @@ class Scene:
         self.__blocked_cells = []#заблокированные клетки
         self.__start = (0,0)#клетка старта
         self.__finish = (9,9)#клетка финиша
-        self.__entities = []#существа|существо на сцене
+        self.__enemies = []#враг|враги на сцене
         self.__player = Player(self)
         self.__background_color = "White"#цвет заднего плана
         self.__text = "SampleText"#текст задания
+        self.__player_step_limit = 99999#лимит на количество шагов игрока
         #self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
         self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
+    def set_player_step_limit(self,amount):#устанавливает лимит на количество шагов игрока
+        self.__player_step_limit = amount
     def set_size(self,x,y):#Устанавливает размер сцены, если сцена меньше чем одна клетка, то вызывает исключение.
         if (x==0 and y ==0) or (x<0 or y<0):
             raise Exception("Invalid scene size")
@@ -45,13 +48,13 @@ class Scene:
             return False
         self.__finish = (x,y)
         return True
-    def add_entity(self,x,y,entity):#Добавляет существо на сцену. Если другое существо уже есть на этих координатах или клетка заблокирована, то возвращает False, иначе True.
-        for i in self.__entities:
+    def add_enemy(self,x,y,entity):#Добавляет врага на сцену. Если другой враг уже есть на этих координатах или клетка заблокирована, то возвращает False, иначе True.
+        for i in self.__enemy:
             if i[0]==x and i[1]==y:
                 return False
         if (x,y) in self.__blocked_cells:
             return False
-        self.__entities.append(x,y,entity)
+        self.__enemy.append(x,y,entity)
         return True
     def add_treat(self,x,y):#добавляет награду на клетку.
         self.__treats_cells.append((x,y))
@@ -62,6 +65,8 @@ class Scene:
                 self.__treats_cells.pop(i)
                 return True
         return False
+    def add_forbiden_func(self,func_name):#добавляет функцию которую нельзя использовать в данной задаче
+        self.__forbidden_functions.append(func_name)
     def add_limited_function(self,function_name,amount):#Добавляет лимит на использование функции с назанием function_name, т.е ее можно будет использовать только amount раз
         self.__limited_functions.append({"name":function_name,"amount_allowed":amount})
     def remove_limited_function(self,function_name):
@@ -75,7 +80,7 @@ class Scene:
 
             return result
         except Exception as error:
-            return error
+            return error.__traceback__()
     @concurrent.process(timeout=6)
     def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
                             # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
@@ -103,6 +108,7 @@ class Scene:
         if len(errors)==0:
             passed=True
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
+
     @property
     def get_start(self):#Возвращает точку старта.
         return  self.__start
@@ -110,8 +116,8 @@ class Scene:
     def get_finish(self):#Возваращает точку финиша.
         return  self.__finish
     @property
-    def get_entities(self):#Возвращает суещств на сцене.
-        return self.__entities
+    def get_enemies(self):#Возвращает врагов на сцене.
+        return self.__enemies
     @property
     def get_size(self):#Возвращает размер сцены.
         return self.__size
@@ -124,6 +130,9 @@ class Scene:
     @property
     def get_limited_functions(self):
         return self.__limited_functions
+    @property
+    def get_player_step_limit(self):
+        return self.__player_step_limit
 class Player:
     def __init__(self,scene):
         self.__steps = []  # список точек передвжиения улитки.(массив кортежей координат (x,y))
@@ -136,10 +145,14 @@ class Player:
     def __go_to(self,x,y):#служебная функция для перехода на данные координаты
         if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1]-1 or x>self.__scene.get_size[0]-1:
             return False
+        if self.get_steps_left==0:
+            raise Exception("OutOfGas")
         self.__position = (x,y)
         self.__steps.append((x,y))
+        self.__scene.set_player_step_limit(self.get_steps_left-1)
         return True
     def collect(self):#Собирает с клетки на которой стоит награду, если награды нет, то возвращает False, иначе True.
+
         if self.__position in self.__scene.get_treats:
             self.__collected.append(self.__position)
             self.__scene.remove_treat(self.__position[0],self.__position[1])
@@ -176,3 +189,6 @@ class Player:
     @property
     def get_position(self):
         return self.__position
+    @property
+    def get_steps_left(self):
+        return self.__scene.get_player_step_limit
