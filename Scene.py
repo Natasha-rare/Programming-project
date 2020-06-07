@@ -15,11 +15,19 @@ class Scene:
         self.__player = Player(self)
         self.__background_color = "White"#цвет заднего плана
         self.__text = "SampleText"#текст задания
+        self.__mud_cells = []#клетка, на прохождение которое потребуется не один “ход”, а два
         self.__player_step_limit = 99999#лимит на количество шагов игрока
         #self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
         self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
+    def add_mud_cell(self,x,y):#добавляет грязевую клетку
+        self.__mud_cells.append((x,y))
+    def remove_mud_cell(self,x,y):#удаляет грязевую клетку
+        for i in range(len(self.__mud_cells)):
+            if self.__mud_cells[i] == (x,y):
+                self.__mud_cells.pop(i)
+
     def set_player_step_limit(self,amount):#устанавливает лимит на количество шагов игрока
         self.__player_step_limit = amount
     def set_size(self,x,y):#Устанавливает размер сцены, если сцена меньше чем одна клетка, то вызывает исключение.
@@ -133,6 +141,9 @@ class Scene:
     @property
     def get_player_step_limit(self):
         return self.__player_step_limit
+    @property
+    def get_mud_cells(self):
+        return self.__mud_cells
 class Player:
     def __init__(self,scene):
         self.__steps = []  # список точек передвжиения улитки.(массив кортежей координат (x,y))
@@ -145,11 +156,13 @@ class Player:
     def __go_to(self,x,y):#служебная функция для перехода на данные координаты
         if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1]-1 or x>self.__scene.get_size[0]-1:
             return False
-        if self.get_steps_left==0:
+        if self.get_steps_left==0 or ((x,y) in self.__scene.get_mud_cells and self.get_steps_left==1):
             raise Exception("OutOfGas")
         self.__position = (x,y)
         self.__steps.append((x,y))
         self.__scene.set_player_step_limit(self.get_steps_left-1)
+        if (x,y) in self.__scene.get_mud_cells:
+            self.__scene.set_player_step_limit(self.get_steps_left - 1)
         return True
     def collect(self):#Собирает с клетки на которой стоит награду, если награды нет, то возвращает False, иначе True.
 
