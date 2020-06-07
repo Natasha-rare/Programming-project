@@ -11,7 +11,7 @@
 		width: 100%; /*ширина*/
 		background-attachment: fixed; /*фон не подвижен*/
 		background-repeat: no-repeat; /*фон не меняется*/
-		background-color: #24303F; /*основной цыет -- можно сделать что-то более весёленькое*/
+		background-color: #006b3c; /*основной цвет -- можно сделать что-то более весёленькое*/
 		height: 100vh; /*высота*/
 
 	}
@@ -55,7 +55,7 @@
 		*margin: 0;
 		background-attachment: fixed;
 		background-repeat: no-repeat;
-		background-color: #24303F;
+		background-color: #006b3c;
 	}
 
 
