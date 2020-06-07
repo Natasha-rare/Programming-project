@@ -91,7 +91,7 @@ class Scene:
             return error.__traceback__()
     @concurrent.process(timeout=6)
     def Solve_Code(self,code):#Решает код предоставленный пользователем и смотрит прошел пользователь задачу или нет.
-                            # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[],treats:[],passed:Bool,errors:[]}
+                            # Вовзвращает шаги улитки пользователя, список собранных наград и прошел пользователь уровень или нет. Формат такой: {steps:[{type:"type",coords:(x,y),custom:{}}],treats:[],passed:Bool,errors:[]}
         #set_max_runtime(1)#Максимальное кол-во секунд действия процессора
         snail = self.__player
 
@@ -111,7 +111,7 @@ class Scene:
             if i in code:
                 errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
         for i in self.__limited_functions:
-            if code.count((i['name'])>i['amount_allowed']):
+            if code.count(i['name'])>int(i['amount_allowed']):
                 errors.append("Exceeded_Limit_Of_Function:"+i['name'])
         if len(errors)==0:
             passed=True
@@ -146,7 +146,7 @@ class Scene:
         return self.__mud_cells
 class Player:
     def __init__(self,scene):
-        self.__steps = []  # список точек передвжиения улитки.(массив кортежей координат (x,y))
+        self.__steps = []  # список действий улитки
         self.__scene = scene#Объект сцены на которой находится игрок.
         self.__position = scene.get_start
         self.__rotation = 90#угол поворота игрока в градусах, можно будет менять спрайт в зависимости от этого параметра. По дефолту поворот 90 градусов, значит улитка смотрит туда ----->
@@ -158,8 +158,9 @@ class Player:
             return False
         if self.get_steps_left==0 or ((x,y) in self.__scene.get_mud_cells and self.get_steps_left==1):
             raise Exception("OutOfGas")
+        self.__steps.append({"type": "go_forward", "coords": self.__position,"custom":(x,y)})  # Формат {type:"type",coords:(x,y),custom:}
         self.__position = (x,y)
-        self.__steps.append((x,y))
+
         self.__scene.set_player_step_limit(self.get_steps_left-1)
         if (x,y) in self.__scene.get_mud_cells:
             self.__scene.set_player_step_limit(self.get_steps_left - 1)
@@ -169,6 +170,7 @@ class Player:
         if self.__position in self.__scene.get_treats:
             self.__collected.append(self.__position)
             self.__scene.remove_treat(self.__position[0],self.__position[1])
+            self.__steps.append({"type": "collect_treat", "coords": self.__position,"custom":len(self.__collected)})#Добавляет в результат действие сбора награды,координаты действия и количество собранных наград после выполнения выполнения.
             return True
         return False
     @property
@@ -176,12 +178,15 @@ class Player:
         return self.__collected
     def turn_left(self):#поворачивает игрока на 90 градусов влево
         self.__rotation-=90
+
         if self.__rotation<0:
             self.__rotation+=360
+        self.__steps.append({"type": "turn", "coords": self.__position,"custom": self.__rotation})  # Добавляет в результат действие поворота, в custom сохраняется значение поворота после выполения действия.
     def turn_right(self):#поворачивает игрока на 90 градусов вправо
         self.__rotation+=90
         if self.__rotation>=360:
             self.__rotation-=360
+        self.__steps.append({"type": "turn", "coords": self.__position,"custom": self.__rotation})  # Добавляет в результат действие поворота, в custom сохраняется значение поворота после выполения действия.
     def go_forward(self):#Сделать 1 шаг вперёд
         x = self.__position[0]
         y = self.__position[1]
