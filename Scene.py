@@ -22,6 +22,19 @@ class Scene:
         self.__treats_cells = []#клетки с едой/наградами для сбора.
         self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
         self.__start_code = ""#Код который по дефолту задается учителем, данный код может менять только сам учитель при создании задания.
+    def add_enemy(self,x,y,type):#Добавляет врага, если там уже есть другой враг, то возвращает False, иначе True
+        for i in self.__enemies:
+            if i['coords']==(x,y):
+                return False
+        self.__enemies.append({"coords":(x,y),"type":type})
+        return True
+    def remove_enemy(self,x,y):
+       for i in range(len(self.__enemies)):
+           if self.__enemies[i]['coords']==(x,y):
+               self.__enemies.pop(i)
+    @property
+    def get_enemies(self):
+        return self.__enemies
     def set_start_code(self,code):
         self.__start_code = code
         if self.__start_code!="" and self.__start_code[-1]!='\n':#делает последний символ в код переносом на новую строчку, т.к некоторые могут об этом забывать.
@@ -37,11 +50,12 @@ class Scene:
     def get_mandatoy_functions(self):
         return self.__mandatory_functions
     def add_mud_cell(self,x,y):#добавляет грязевую клетку
-        self.__mud_cells.append((x,y))
+        if (x,y) not in self.__mud_cells:
+            self.__mud_cells.append((x,y))
     def remove_mud_cell(self,x,y):#удаляет грязевую клетку
-        for i in range(len(self.__mud_cells)):
-            if self.__mud_cells[i] == (x,y):
-                self.__mud_cells.pop(i)
+        for i in self.__mud_cells:
+            if i ==(x,y):
+                self.__mud_cells.remove((x,y))
 
     def set_player_step_limit(self,amount):#устанавливает лимит на количество шагов игрока
         self.__player_step_limit = int(amount)
@@ -50,7 +64,7 @@ class Scene:
             raise Exception("Invalid scene size")
         self.__size = (x,y)
     def block_cell(self,x,y):#Блокирует клетку, если на этой клетке находится старт, то клетку нельзя заблокировать.
-        if self.__start==(x,y):
+        if self.__start==(x,y) or (x,y) in self.__blocked_cells:
             return False
         self.__blocked_cells.append((x,y))
         return True
@@ -70,14 +84,6 @@ class Scene:
         if (x,y) in self.__blocked_cells:
             return False
         self.__finish = (x,y)
-        return True
-    def add_enemy(self,x,y,entity):#Добавляет врага на сцену. Если другой враг уже есть на этих координатах или клетка заблокирована, то возвращает False, иначе True.
-        for i in self.__enemy:
-            if i[0]==x and i[1]==y:
-                return False
-        if (x,y) in self.__blocked_cells:
-            return False
-        self.__enemy.append(x,y,entity)
         return True
     def add_treat(self,x,y):#добавляет награду на клетку.
         self.__treats_cells.append((x,y))
@@ -177,6 +183,10 @@ class Player:
             return False
         if self.get_steps_left==0 or ((x,y) in self.__scene.get_mud_cells and self.get_steps_left==1):
             raise Exception("OutOfGas")
+        for i in self.__scene.get_enemies:
+            if i['coords']==(x,y):
+                self.__steps.append({"type": "got_killed", "coords": self.__position,"custom":i})#был убит врагом i при переходе с позиции coords на позицию врага.
+                raise Exception("GotEaten")
         self.__steps.append({"type": "go_forward", "coords": self.__position,"custom":(x,y)})  # Формат {type:"type",coords:(x,y),custom:}
         self.__position = (x,y)
 
