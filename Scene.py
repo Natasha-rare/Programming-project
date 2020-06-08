@@ -25,6 +25,7 @@ class Scene:
         self.__mandatory_functions.append(function)
     def remove_mandatory_function(self,function):
         self.__mandatory_functions.remove(function)
+    @property
     def get_mandatoy_functions(self):
         return self.__mandatory_functions
     def add_mud_cell(self,x,y):#добавляет грязевую клетку
@@ -111,7 +112,7 @@ class Scene:
         except Exception as e:
             errors.append({'SystemError':str(e)})
         passed = False
-        if len(snail.get_steps) ==0 or snail.get_steps[-1]!=self.get_finish:
+        if len(snail.get_steps) ==0 or snail.get_position!=self.get_finish:
             errors.append({"Not_On_Finish_Point":True})  # Добавляет ошибку, указывающую на то, что игрок не достиг финиша.
         for i in self.__forbidden_functions:
             if i in code:
@@ -119,11 +120,12 @@ class Scene:
         for i in self.__limited_functions:
             if code.count(i['name'])>int(i['amount_allowed']):
                 errors.append({"Exceeded_Limit_Of_Function":i['name']})
-        if len(errors)==0:
-            passed=True
         for i in self.__mandatory_functions:
             if i not in code:
-                errors.append({"UnusedMandatoryFunction":i})
+                errors.append({"UnusedMandatoryFunction": i})
+        if len(errors)==0:
+            passed=True
+
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
 
     @property
