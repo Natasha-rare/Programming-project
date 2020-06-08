@@ -197,21 +197,21 @@ class Player:
 
                 self.__scene.unblock_cell(x, y - 1)
                 self.__scene.block_cell(x, y - 2)
-
+                self.__steps.append({"type": "moved_blocked", "coords": self.__position,"custom":[(x, y - 1),(x, y - 2)]})
         if self.__rotation == 90 and self.check_can_move(x+1,y,x+2,y):
                 self.__scene.unblock_cell(x+1,y)
                 self.__scene.block_cell(x+2,y)
-
+                self.__steps.append({"type": "moved_blocked", "coords": self.__position, "custom": [(x+1, y), (x+2, y)]})
         if self.__rotation == 180 and self.check_can_move(x,y+1,x,y+2):
 
                 self.__scene.unblock_cell(x, y+1)
                 self.__scene.block_cell(x, y+2)
-
+                self.__steps.append({"type": "moved_blocked", "coords": self.__position, "custom": [(x, y+1), (x, y+2)]})
         if self.__rotation == 270and self.check_can_move(x-1, y,x-2, y):
 
                 self.__scene.unblock_cell(x-1, y)
                 self.__scene.block_cell(x-2, y)
-
+                self.__steps.append({"type": "moved_blocked", "coords": self.__position, "custom": [(x-1, y), (x-2, y)]})
     def __go_to(self,x,y):#служебная функция для перехода на данные координаты
         if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1]-1 or x>self.__scene.get_size[0]-1:
             return False
