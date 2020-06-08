@@ -21,6 +21,14 @@ class Scene:
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
         self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
+        self.__start_code = ""#Код который по дефолту задается учителем, данный код может менять только сам учитель при создании задания.
+    def set_start_code(self,code):
+        self.__start_code = code
+        if self.__start_code!="" and self.__start_code[-1]!='\n':#делает последний символ в код переносом на новую строчку, т.к некоторые могут об этом забывать.
+            self.__start_code+='\n'
+    @property
+    def get_start_code(self):
+        return self.__start_code
     def add_mandatory_function(self,function):
         self.__mandatory_functions.append(function)
     def remove_mandatory_function(self,function):
@@ -89,7 +97,7 @@ class Scene:
             if self.__limited_functions[i]['name']==function_name:
                 self.__limited_functions.pop(i)
     def Solve_Code_Safe(self,code):
-        future = self.Solve_Code(code)
+        future = self.Solve_Code(self.get_start_code+code)
         try:
             result = future.result()
 
