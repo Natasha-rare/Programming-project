@@ -13,7 +13,8 @@
 <body>
 <canvas id="canvas" data-image="/static/img/snail.png"></canvas>
 <script src="/static/js/base-js.js"></script>
-<div class="intro" style="transform: translate(-50%, -50%);">
+<div class="intro">
+<!--<div class="intro" style="transform: translate(-50%, -50%);">-->
 {% block content %}
 
     {% if form.errors %}
@@ -22,7 +23,7 @@
 
     {% if next %}
         {% if user.is_authenticated %}
-            <p> У вас нет доступа к жтой странице. Чтобы продолжить,
+            <p> У вас нет доступа к этой странице. Чтобы продолжить,
                 войдите пожалуйста через аккаунт, имеющий доступ.</p>
         {% else %}
             <p>Войдите, чтобы увидеть эту страницу.</p>

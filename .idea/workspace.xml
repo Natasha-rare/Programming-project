@@ -20,19 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="472e46fe-87ea-49e2-bf41-61abc90d3b3b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/img/no.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/yes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/base-js.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/button.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/scss/button.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myproject/myproject/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/myproject/myproject/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/templates/registration/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/registration/signup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/templates/startpage.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/templates/startpage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/base-css.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/base-css.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,19 +53,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/static/img" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/project" />
-      <recent name="$PROJECT_DIR$/myproject" />
-      <recent name="$PROJECT_DIR$/project/templates" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/img" />
       <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/img" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/project" />
+      <recent name="$PROJECT_DIR$/myproject" />
+      <recent name="$PROJECT_DIR$/project/templates" />
     </key>
   </component>
   <component name="RunManager" selected="Python.manage">
