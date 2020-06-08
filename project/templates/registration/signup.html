@@ -12,8 +12,6 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base-css.css' %}">
 
-
-
 <body>
 <canvas id="canvas" data-image="/static/img/snail.png"></canvas>
 <script src="/static/js/base-js.js"></script>
@@ -58,33 +56,33 @@
                     })
         }
     </script>
-<!--    <script>-->
-<!--        $("#id_name").change(function () {-->
-<!--            let data = { csrfmiddlewaretoken: '{{ csrf_token }}', name: $("#id_username").val() };-->
-<!--            $.ajax-->
-<!--            ({-->
+    <script>
+        $("#id_name").change(function () {
+            let data = { csrfmiddlewaretoken: '{{ csrf_token }}', name: $("#id_username").val() };
+            $.ajax
+            ({
 
-<!--                type: "POST",-->
-<!--                data: data,-->
-<!--                url: '/accounts/signup/',-->
-<!--                success:function(serverData)-->
-<!--                {-->
-<!--                    console.log(serverData['username_occupation']);-->
-<!--                    if (serverData['username_occupation']) {-->
-<!--                        document.getElementById("id_username").setCustomValidity('Логин уже занят!');-->
-<!--                    }-->
-<!--                    else {-->
-<!--                        document.getElementById("id_username").setCustomValidity('');-->
-<!--                    }-->
-<!--                },-->
-<!--                error: function(e)-->
-<!--                {-->
+                type: "POST",
+                data: data,
+                url: '/accounts/signup/',
+                success:function(serverData)
+                {
+                    console.log(serverData['username_occupation']);
+                    if (serverData['username_occupation']) {
+                        document.getElementById("id_username").setCustomValidity('Логин уже занят!');
+                    }
+                    else {
+                        document.getElementById("id_username").setCustomValidity('');
+                    }
+                },
+                error: function(e)
+                {
 
-<!--                }-->
-<!--            });-->
+                }
+            });
 
-<!--        });-->
-<!--    </script>-->
+        });
+    </script>
     <script>
         $("#id_email").change(function () {
             let data = { csrfmiddlewaretoken: '{{ csrf_token }}', email: $("#id_email").val() };
@@ -147,8 +145,6 @@
             }
         });
     </script>
-
-
 </div>
 {% include "footer.html" %}
 </body>

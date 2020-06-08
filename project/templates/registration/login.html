@@ -31,11 +31,11 @@
     {% endif %}
 
     <form method="post" action="{% url 'login' %}">
-    <div class="mainlabel">ВХОД</div><br><br><br>
+    <div class="mainlabel">ВХОД</div><br><br>
         {% csrf_token %}
-
-        Логин (почта): <br><br> {{ form.email }} <br><br>
-        Пароль: <br><br>{{ form.password }} <br><br><br>
+        Логин (E-mail): <br><br>
+        <input type="email" value="{{ form.email }}"> <br><br>
+        Пароль:<br><br>{{ form.password }}<br><br>
         <button type="submit" class="button-container">ВОЙТИ</button>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
