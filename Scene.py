@@ -28,6 +28,7 @@ class Scene:
                 return False
         self.__enemies.append({"coords":(x,y),"type":type})
         return True
+
     def remove_enemy(self,x,y):
        for i in range(len(self.__enemies)):
            if self.__enemies[i]['coords']==(x,y):
@@ -177,6 +178,39 @@ class Player:
         self.__rotation = 90#угол поворота игрока в градусах, можно будет менять спрайт в зависимости от этого параметра. По дефолту поворот 90 градусов, значит улитка смотрит туда ----->
         self.__collected = []#массив кортежей (x,y), указывающий точки в которых пользователь подобрал награды
         self.__hp = 100#количество здоровья в процентах, не уверен, что будем убивать улиток в детской игре, но все же может пригодиться.
+    def check_can_move(self,x1,y1,x2,y2):
+        if (x1,y1) not in self.__scene.get_blocked:
+            return False
+        if (x2,y2) in self.__scene.get_blocked:
+            return False
+        for i in self.__scene.get_enemies:
+            if i['coords'] == (x2, y2):
+                return False
+        if x2 < 0 or y2 < 0 or y2 > self.__scene.get_size[1] - 1 or x2 > self.__scene.get_size[0] - 1:
+            return False
+        return True
+
+    def move_blocked(self):#позволяет двигать заблокированную клетку.
+        x = self.__position[0]
+        y = self.__position[1]
+        if self.__rotation == 0 and self.check_can_move(x,y-1,x,y-2):
+
+                self.__scene.unblock_cell(x, y - 1)
+                self.__scene.block_cell(x, y - 2)
+
+        if self.__rotation == 90 and self.check_can_move(x+1,y,x+2,y):
+                self.__scene.unblock_cell(x+1,y)
+                self.__scene.block_cell(x+2,y)
+
+        if self.__rotation == 180 and self.check_can_move(x,y+1,x,y+2):
+
+                self.__scene.unblock_cell(x, y+1)
+                self.__scene.block_cell(x, y+2)
+
+        if self.__rotation == 270and self.check_can_move(x-1, y,x-2, y):
+
+                self.__scene.unblock_cell(x-1, y)
+                self.__scene.block_cell(x-2, y)
 
     def __go_to(self,x,y):#служебная функция для перехода на данные координаты
         if (x,y) in self.__scene.get_blocked or x<0 or y<0 or y>self.__scene.get_size[1]-1 or x>self.__scene.get_size[0]-1:
@@ -227,6 +261,7 @@ class Player:
             self.__go_to(x,y+1)
         if self.__rotation==270:
             self.__go_to(x-1,y)
+
     @property
     def get_steps(self):
         return self.__steps

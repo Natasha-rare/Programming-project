@@ -129,7 +129,7 @@ def display_grid(scene,additional_paint = []):
                     change_type="enemy"
                 if event.key==pygame.K_a:
                     scene = Additional_Settings(scene)
-                print("Enemies:"+scene.get_enemies)
+                #print("Enemies:"+str(scene.get_enemies))
             if event.type==pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 column = pos[0] // (WIDTH + MARGIN)
