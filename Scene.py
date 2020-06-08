@@ -17,10 +17,16 @@ class Scene:
         self.__text = "SampleText"#текст задания
         self.__mud_cells = []#клетка, на прохождение которое потребуется не один “ход”, а два
         self.__player_step_limit = 99999#лимит на количество шагов игрока
-        #self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
+        self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
         self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
+    def add_mandatory_function(self,function):
+        self.__mandatory_functions.append(function)
+    def remove_mandatory_function(self,function):
+        self.__mandatory_functions.remove(function)
+    def get_mandatoy_functions(self):
+        return self.__mandatory_functions
     def add_mud_cell(self,x,y):#добавляет грязевую клетку
         self.__mud_cells.append((x,y))
     def remove_mud_cell(self,x,y):#удаляет грязевую клетку
@@ -29,7 +35,7 @@ class Scene:
                 self.__mud_cells.pop(i)
 
     def set_player_step_limit(self,amount):#устанавливает лимит на количество шагов игрока
-        self.__player_step_limit = amount
+        self.__player_step_limit = int(amount)
     def set_size(self,x,y):#Устанавливает размер сцены, если сцена меньше чем одна клетка, то вызывает исключение.
         if (x==0 and y ==0) or (x<0 or y<0):
             raise Exception("Invalid scene size")
@@ -103,18 +109,21 @@ class Scene:
         try:
             exec(byte_code,safe_globals,{})#{"Scene":Scene,"snail":snail,"Player":Player}
         except Exception as e:
-            errors.append('SystemError:'+str(e))
+            errors.append({'SystemError':str(e)})
         passed = False
         if len(snail.get_steps) ==0 or snail.get_steps[-1]!=self.get_finish:
-            errors.append("Not_On_Finish_Point")  # Добавляет ошибку, указывающую на то, что игрок не достиг финиша.
+            errors.append({"Not_On_Finish_Point":True})  # Добавляет ошибку, указывающую на то, что игрок не достиг финиша.
         for i in self.__forbidden_functions:
             if i in code:
-                errors.append("Use_Of_Forbidden_Function:"+i)#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
+                errors.append({"Use_Of_Forbidden_Function":i})#Добавляет ошибку, указывающую на то, что игрок использовал запещенную функцию.
         for i in self.__limited_functions:
             if code.count(i['name'])>int(i['amount_allowed']):
-                errors.append("Exceeded_Limit_Of_Function:"+i['name'])
+                errors.append({"Exceeded_Limit_Of_Function":i['name']})
         if len(errors)==0:
             passed=True
+        for i in self.__mandatory_functions:
+            if i not in code:
+                errors.append({"UnusedMandatoryFunction":i})
         return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
 
     @property
