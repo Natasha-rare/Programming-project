@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 class SignUpForm(UserCreationForm):
+    roles = (("1", "Ученик"), ("2", "Учитель"))
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input',
                                                          'placeholder': " "}))
     surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input', 'placeholder': " "}))
@@ -12,6 +13,7 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required', widget=forms.TextInput(attrs={'class': 'reg_input',
                                                                                                  'type': 'email',
                                                                                                  'placeholder': " "}))
+    status = forms.ChoiceField(choices=roles, widget=forms.RadioSelect)
     password = forms.CharField(strip=False,
                                widget=forms.PasswordInput(attrs={'class': 'reg_input',
                                                                  'autocomplete': 'new-password', 'placeholder': " "}),
