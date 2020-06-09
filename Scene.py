@@ -20,8 +20,14 @@ class Scene:
         self.__mandatory_functions = []#функции обязательные для использования при выполнении задания
         self.__forbidden_functions = []#функции запрещенные для использования при выполнении задания
         self.__treats_cells = []#клетки с едой/наградами для сбора.
+        self.__minimum_food_collected = 0#минимум еды собранной за уровень
         self.__limited_functions = []#Лимитированные функции-т.е могут быть использованы только n-ое кол-во раз
         self.__start_code = ""#Код который по дефолту задается учителем, данный код может менять только сам учитель при создании задания.
+    def set_food_limit(self,amount):
+        self.__minimum_food_collected=amount
+    @property
+    def get_food_limit(self,amount):
+        return self.__minimum_food_collected
     def add_enemy(self,x,y,type):#Добавляет врага, если там уже есть другой враг, то возвращает False, иначе True
         for i in self.__enemies:
             if i['coords']==(x,y):
@@ -86,13 +92,16 @@ class Scene:
             return False
         self.__finish = (x,y)
         return True
-    def add_treat(self,x,y):#добавляет награду на клетку.
-        self.__treats_cells.append((x,y))
+    def add_treat(self,x,y,amount,type="Leaf"):#добавляет награду на клетку.
+        for i in self.__treats_cells:
+            if i['coords']==(x,y):
+                return False
+        self.__treats_cells.append({"coords":(x,y),"amount":amount,"type":type})
+        return True
     def remove_treat(self,x,y):#удаляет награду с клетки. Если не удалось удалить то False, иначе True.
-        for i in range(len(self.__treats_cells)):
-            x_real, y_real = self.__treats_cells[i]
-            if x_real == x and y_real == y:
-                self.__treats_cells.pop(i)
+        for i in self.__treats_cells:
+            if i['coords']==(x,y):
+                self.__treats_cells.remove(i)
                 return True
         return False
     def add_forbiden_func(self,func_name):#добавляет функцию которую нельзя использовать в данной задаче
@@ -103,6 +112,18 @@ class Scene:
         for i in range(len(self.__limited_functions)):
             if self.__limited_functions[i]['name']==function_name:
                 self.__limited_functions.pop(i)
+    # def Solve_Code_Docker(self,code):#Когда-нибудь у нас будет сервер на линуксе и мы это протестируем, но это будет не сейчас.
+    #     code = "from Scene import *\n"+self.get_start_code+code
+    #     epicbox.configure(
+    #         profiles=[
+    #             epicbox.Profile('python', 'python:3.6.5-alpine')
+    #         ]
+    #     )
+    #     scene_source = open('Scene.py').read()
+    #     files = [{'name': 'main.py', 'content': code.encode('utf-8')},{'name': 'Scene.py', 'content': scene_source.encode('utf-8')}]
+    #     limits = {'cputime': 1, 'memory': 64}
+    #     result = epicbox.run('python', 'python3 main.py', files=files, limits=limits)
+    #     return result
     def Solve_Code_Safe(self,code):
         future = self.Solve_Code(self.get_start_code+code)
         try:
@@ -138,11 +159,15 @@ class Scene:
         for i in self.__mandatory_functions:
             if i not in code:
                 errors.append({"UnusedMandatoryFunction": i})
+        if snail.get_food_collected<self.__minimum_food_collected:
+            errors.append({"NotEnoughFood":snail.get_food_collected})
         if len(errors)==0:
             passed=True
-
-        return {"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors}
-
+        #print("\n#res#\n"+{"steps":snail.get_steps,"treats":snail.get_collected,"passed":passed,"errors":errors,"scene":self.__player.get_scene})
+        return {"steps":snail.get_steps,"treats":snail.get_collected,"food_collected":snail.get_food_collected,"passed":passed,"errors":errors,"scene":self.__player.get_scene}
+    @property
+    def get_player_pos(self):
+        return self.__player.get_position
     @property
     def get_start(self):#Возвращает точку старта.
         return  self.__start
@@ -170,6 +195,9 @@ class Scene:
     @property
     def get_mud_cells(self):
         return self.__mud_cells
+    @property
+    def update_player(self):
+        self.__player = Player(self)
 class Player:
     def __init__(self,scene):
         self.__steps = []  # список действий улитки
@@ -178,6 +206,10 @@ class Player:
         self.__rotation = 90#угол поворота игрока в градусах, можно будет менять спрайт в зависимости от этого параметра. По дефолту поворот 90 градусов, значит улитка смотрит туда ----->
         self.__collected = []#массив кортежей (x,y), указывающий точки в которых пользователь подобрал награды
         self.__hp = 100#количество здоровья в процентах, не уверен, что будем убивать улиток в детской игре, но все же может пригодиться.
+        self.__food_collected = 0#собрано еды
+    @property
+    def get_food_collected(self):
+        return self.__food_collected
     def check_can_move(self,x1,y1,x2,y2):
         if (x1,y1) not in self.__scene.get_blocked:
             return False
@@ -230,11 +262,13 @@ class Player:
         return True
     def collect(self):#Собирает с клетки на которой стоит награду, если награды нет, то возвращает False, иначе True.
 
-        if self.__position in self.__scene.get_treats:
-            self.__collected.append(self.__position)
-            self.__scene.remove_treat(self.__position[0],self.__position[1])
-            self.__steps.append({"type": "collect_treat", "coords": self.__position,"custom":len(self.__collected)})#Добавляет в результат действие сбора награды,координаты действия и количество собранных наград после выполнения выполнения.
-            return True
+        for i in self.__scene.get_treats:
+            if i['coords']==self.__position:
+                self.__collected.append(self.__position)
+                self.__scene.remove_treat(self.__position[0],self.__position[1])
+                self.__food_collected+=i['amount']
+                self.__steps.append({"type": "collect_treat", "coords": self.__position,"custom":self.get_food_collected})#Добавляет в результат действие сбора награды,координаты действия и количество собранных наград после выполнения выполнения.
+                return True
         return False
     @property
     def get_collected(self):#Возвращает массив кортежей (x,y), указывающий точки в которых пользователь подобрал награды
@@ -274,3 +308,6 @@ class Player:
     @property
     def get_steps_left(self):
         return self.__scene.get_player_step_limit
+    @property
+    def get_scene(self):
+        return self.__scene

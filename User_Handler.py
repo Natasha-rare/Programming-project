@@ -13,7 +13,7 @@ def Run_Code(text):
 
     steps = scene.Solve_Code_Safe(text)
     print(steps)
-    display_grid(scene,additional_paint=steps['steps'])
+    display_grid(steps['scene'],additional_paint=steps['steps'])
 def Request_Code():
     root = Tk()
     text = Text(width=50, height=50, bg="darkgreen", fg='white', wrap=WORD)

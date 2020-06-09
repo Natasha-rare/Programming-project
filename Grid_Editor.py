@@ -10,6 +10,7 @@ import Scene
 
 
 def Show_Scene_Info(scene):
+    scene.update_player
     print("Start:" + str(scene.get_start))
     print("Finish:"+str(scene.get_finish))
     print("Max_Steps:"+str(scene.get_player_step_limit))
@@ -17,6 +18,7 @@ def Show_Scene_Info(scene):
     print("Mud cells:"+str(scene.get_mud_cells))
     print("mandatory_functions:"+str(scene.get_mandatoy_functions))
     print("Start_Code:\n"+scene.get_start_code)
+    print("Player_coords:"+str(scene.get_player_pos))
 def Additional_Settings(scene):
 
     root = Tk()
@@ -54,18 +56,24 @@ def Additional_Settings(scene):
     mandatory_function_button.grid(row = 3, column = 2,padx=5, pady=5,sticky="e")
 
     start_code_entry = ScrolledText()
-    start_code_entry.grid(row=4, column=1, padx=5, pady=5)
+    start_code_entry.grid(row=5, column=1, padx=5, pady=5)
     if scene.get_start_code!="":
         start_code_entry.insert(0,scene.get_start_code)
     start_code_label = Label(text="Начальный код:")
-    start_code_label.grid(row=4,column = 0,padx =5,pady=5)
+    start_code_label.grid(row=5,column = 0,padx =5,pady=5)
+    start_code_button = Button(text="Добавить",command=lambda: scene.set_start_code(start_code_entry.get("1.0", END)))
+    start_code_button.grid(row=5, column=2, padx=5, pady=5, sticky="e")
 
-    start_code_button = Button(text="Добавить",
-                                       command=lambda: scene.set_start_code(start_code_entry.get("1.0",END)))
-    start_code_button.grid(row=4, column=2, padx=5, pady=5, sticky="e")
+    food_limit = Entry()
+    food_limit.grid(row=4, column=1, padx=5, pady=5)
+    food_limit_label = Label(text="Минимальное количество еды для прохождения уровня:")
+    food_limit_label.grid(row=4, column=0, padx=5, pady=5)
+    food_limit_button = Button(text="Добавить",command=lambda: scene.set_food_limit(int(food_limit.get())))
+    food_limit_button.grid(row=4, column=2, padx=5, pady=5, sticky="e")
 
-    show_info_button.grid(row=5,column = 2,padx=5, pady=5,sticky="e")
+    show_info_button.grid(row=6,column = 2,padx=5, pady=5,sticky="e")
     root.mainloop()
+    scene.update_player
     return scene
     # вставка начальных данных
     # name_entry.insert(0, "Tom")
@@ -119,6 +127,7 @@ def display_grid(scene,additional_paint = []):
                 if event.key==pygame.K_s:
                     name = input_text("Введите имя файла:")
                     if name!=None:
+                        scene.update_player
                         with open(name, 'wb') as output:
                             pickle.dump(scene, output, pickle.HIGHEST_PROTOCOL)
                 if event.key==pygame.K_6:
@@ -150,7 +159,7 @@ def display_grid(scene,additional_paint = []):
                     if scene.get_start==(column,row):
                         scene.set_start(-1,-1)
                 if change_type=="treat":
-                    scene.add_treat(column,row)
+                    scene.add_treat(column,row,int(input_text("Введите количество еды:")))
                 if change_type=="mud":
                     scene.add_mud_cell(column,row)
                 if change_type=="enemy":
@@ -172,8 +181,9 @@ def display_grid(scene,additional_paint = []):
                                   (MARGIN + HEIGHT) * i + MARGIN,
                                   WIDTH,
                                   HEIGHT])
-                if (j,i) in scene.get_treats:
-                    screen.blit(load_treat,((MARGIN + WIDTH) * j + MARGIN,(MARGIN + HEIGHT) * i + MARGIN))
+                for k in scene.get_treats:
+                    if (j,i) == k['coords']:
+                     screen.blit(load_treat,((MARGIN + WIDTH) * j + MARGIN,(MARGIN + HEIGHT) * i + MARGIN))
                 for k in scene.get_enemies:
                     if k['coords'] == (j, i):
                         screen.blit(tapok,
