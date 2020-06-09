@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 class SignUpForm(UserCreationForm):
-    roles = (("1", "Ученик"), ("2", "Учитель"))
+    roles = (("student", "Ученик"), ("teacher", "Учитель"))
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input',
                                                          'placeholder': " "}))
     surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'reg_input', 'placeholder': " "}))
