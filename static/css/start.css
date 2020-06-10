@@ -65,11 +65,11 @@ button:hover{
 	 background-size: 400% 400%;
 	 *animation: gradient 5s ease infinite;
      font-size: 32pt;
-    font-family: Helvetica Light ;
+     font-family: Helvetica Light ;
      margin: auto;
 	 text-align: center;
-    color: white;
-    position: relative;
+     color: white;
+     position: relative;
 
 transform: translate(0, 0);
 }
