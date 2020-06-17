@@ -16,11 +16,9 @@
 <div class="intro">
 <!--<div class="intro" style="transform: translate(-50%, -50%);">-->
 {% block content %}
-
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
-
     {% if next %}
         {% if user.is_authenticated %}
             <p> У вас нет доступа к этой странице. Чтобы продолжить,
@@ -29,7 +27,6 @@
             <p>Войдите, чтобы увидеть эту страницу.</p>
         {% endif %}
     {% endif %}
-
     <form method="post" action="{% url 'login' %}">
     <div class="mainlabel">ВХОД</div><br><br>
         {% csrf_token %}
