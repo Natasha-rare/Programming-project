@@ -89,6 +89,9 @@ def registration(request):
     return HttpResponse(status=405)
 
 
+
+
+
 def activate(request, uidb64, token):
     """
     Этот метод нужен для подтверждения адреса электронной почте. При переходе по ссылке из письма, адрес подтверждается.
@@ -136,3 +139,6 @@ def main(request):
     return render(request, 'startpage.html', {
         'user': request.user.id
     })
+
+def mainpage(request):
+    return render(request, 'main_page.html')

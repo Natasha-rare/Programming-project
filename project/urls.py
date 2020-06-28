@@ -26,4 +26,5 @@ urlpatterns = [
     path('accounts/activate/<uidb64>/<token>/', views.activate, name='activate'),
     path('accounts/<int:user_id>/', views.lk, name='lk'),
     path('', views.main),
+    path('main/', views.mainpage)
 ]

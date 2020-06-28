@@ -96,6 +96,80 @@
 		font-size: 24pt;
 	}
 
+    header .main {
+      height: 20px;
+      background-color: white;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 16px;
+    }
+
+    #switcher {
+      position: absolute;
+      left: -100px;
+      visibility: hidden;
+    }
+
+    .menu {
+      display: flex;
+      /*width: 50%;
+      height: 100vh;
+      flex-direction: column;
+      justify-content: left;
+      align-items: left;*/
+    }
+
+     .menu__link {
+        text-decoration: none;
+        font-size: 17px;
+        padding: 10px;
+        display: block;
+        font-family: 'Quicksand', sans-serif;
+     }
+
+	 .menu__link:hover {
+        background-color: #345678;
+     }
+
+    .fas {
+      color: white;
+      font-size: 24px;
+      display: none;
+    }
+
+    .close {
+        position: absolute;
+        left: 24px;
+        top: 24px;
+        color: white;
+        font-size: 24px;
+        }
+
+     .open,
+     .close{
+      /*color: white;
+      font-size: 24px;*/
+      display: none;
+    }
+
+    #switcher:checked~nav {
+      left: 10px;
+    }
+
+    nav {
+        position: fixed;
+        left: 2px;
+        top: 0px;
+        width: 30px;
+        /*background-color: white;*/
+        transition: right .2s;
+    }
+
+    .open,
+    .close{
+        display: block;
+    }
 
 	@keyframes gradient {
 		0% {
@@ -113,6 +187,9 @@
 	}
 
 	label {
+	    background-attachment: fixed;
+		background-repeat: no-repeat;
+		position: absolute;
 		color: white;
 		font-family: 'Quicksand', sans-serif;
 	}

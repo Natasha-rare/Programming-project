@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>main</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base-css.css' %}">
+</head>
+
+<header class="main">
+    <input type="checkbox" id="switcher">
+    <label class="open" for="switcher"><i class="fas fa-bars"></i></label>
+    <nav>
+    <ul class="menu">
+      <li><a class="menu__link" href="">Главная</a></li>
+      <li><a class="menu__link" href="#">Задачи</a></li>
+      <li><a class="menu__link" href="#">Контакты</a></li>
+    </ul>
+    </nav>
+    <label class="close" for="switcher"><i class="far fa-window-close"></i></label>
+</header>
+
+<body>
+
+<canvas id="canvas" data-image="/static/img/snail.png"></canvas>
+
+<label style="width, height: 200px; left: 20%;">
+    <div>
+        <img src="/static/img/snail 2.png" alt="<3">
+        <a>Hello, Name!</a>
+    </div>
+</label>
+
+<script src="/static/js/base-js.js"></script>
+{% include "footer.html" %}
+</body>
+
+</html>
